@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from bson import ObjectId
 import requests
 from datetime import datetime
 from .models import UsersData, UsersOTP
