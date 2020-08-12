@@ -40,7 +40,8 @@ def home_page(request):
         user_details = UsersData.objects.filter(number=number)
         for user in user_details:
             user_name = user.username
-        return render(request, 'files/homepage.html', context={"username": user_name})
+            country_flag = user.country
+        return render(request, 'files/homepage.html', context={"username": user_name, "country_flag": country_flag})
     except:
         return redirect("/login/")
 
