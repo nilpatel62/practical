@@ -56,8 +56,8 @@
                  $("#confirm").hide();
             });
             function sendOtp() {
+                var ip_address = "";
                 var number=document.getElementById("number").value;
-                console.log("Hello", number);
                 var data = {
                     "number": number
                 }
@@ -83,27 +83,34 @@
                 });
             }
             function confirmOtp() {
-                var number=document.getElementById("number").value;
-                var otp=document.getElementById("otp").value;
-                console.log("Hello", number);
-                var data = {
-                    "number": number,
-                    "otp": otp
-                }
-                $.ajax({
-                  type: "POST",
-                  url: "http://127.0.0.1:8000/validateOtp/",
-                  data:JSON.stringify(data),
-                  contentType: 'application/json',
-                  success: function(result, status, error)
-                    {
-                        window.location.href = "http://127.0.0.1:8000/homepage/";
-                    },
-                  error: function (request, status, error) {
-                        if(request.status == 422){
-                            window.alert("Please Enter Correct OTP");
-                        }
+                $.getJSON('https://ipinfo.io/json', function(data) {
+                    var ip_address = JSON.stringify(data, null, 2);
+                    var number=document.getElementById("number").value;
+                    var otp=document.getElementById("otp").value;
+                    console.log("Hello", number);
+                    var data = {
+                        "number": number,
+                        "otp": otp,
+                        "ipAddress": ip_address
                     }
+                    $.ajax({
+                      type: "POST",
+                      url: "http://127.0.0.1:8000/validateOtp/",
+                      data:JSON.stringify(data),
+                      contentType: 'application/json',
+                      success: function(result, status, error)
+                        {
+                            window.location.href = "http://127.0.0.1:8000/homepage/";
+                        },
+                      error: function (request, status, error) {
+                            if(request.status == 422){
+                                window.alert("Please Enter Correct OTP...!!!");
+                            }
+                            if(request.status == 403){
+                                window.alert("Please Try After Sometimes Because You made 3 incorrect attempts, You need to Wait for 5 minutes..!!");
+                            }
+                        }
+                    });
                 });
             }
         </script>

@@ -63,34 +63,38 @@
                         }
                     }
             function myFunction() {
-                var number=document.getElementById("phone").value;
-                var email=document.getElementById("email").value;
-                var username=document.getElementById("txt").value;
-                var password=document.getElementById("pass1").value;
-                console.log("Hello", number);
-                var data = {
-                    "number": number,
-                    "email": email,
-                    "username": username,
-                    "password": password,
-                }
-                $.ajax({
-                  type: "POST",
-                  url: "http://127.0.0.1:8000/register/",
-                  data:JSON.stringify(data),
-                  contentType: 'application/json',
-                  success: function(result, status, error)
-                    {
-                        console.log("inside success",result,status)
-                        window.alert("Email has sent to your registered Email Id");
-                        window.location.href = "http://127.0.0.1:8000/homepage/";
-                    },
-                  error: function (request, status, error) {
-                        if(request.status == 409){
-                            window.alert("Email already registered with other users");
-                            window.location.href = "http://127.0.0.1:8000/";
-                        }
+                $.getJSON('https://ipinfo.io/json', function(data) {
+                    var number=document.getElementById("phone").value;
+                    var email=document.getElementById("email").value;
+                    var username=document.getElementById("txt").value;
+                    var password=document.getElementById("pass1").value;
+                    var ip_address=JSON.stringify(data, null, 2);
+                    console.log("Hello", number);
+                    var data = {
+                        "number": number,
+                        "email": email,
+                        "username": username,
+                        "password": password,
+                        "ipAddress": ip_address,
                     }
+                    $.ajax({
+                      type: "POST",
+                      url: "http://127.0.0.1:8000/register/",
+                      data:JSON.stringify(data),
+                      contentType: 'application/json',
+                      success: function(result, status, error)
+                        {
+                            console.log("inside success",result,status)
+                            window.alert("Email has sent to your registered Email Id");
+                            window.location.href = "http://127.0.0.1:8000/homepage/";
+                        },
+                      error: function (request, status, error) {
+                            if(request.status == 409){
+                                window.alert("Email already registered with other users");
+                                window.location.href = "http://127.0.0.1:8000/";
+                            }
+                        }
+                    });
                 });
             }
         </script>
