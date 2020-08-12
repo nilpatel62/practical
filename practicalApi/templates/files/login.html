@@ -79,6 +79,11 @@
                             window.alert("Email already registered with other users");
                             window.location.href = "http://127.0.0.1:8000/";
                         }
+                        if(request.status == 500)
+                        {
+                                window.alert("Try After Sometime");
+                                window.location.href = "http://127.0.0.1:8000/";
+                        }
                     }
                 });
             }
@@ -111,6 +116,10 @@
                             }
                             if(request.status == 404){
                                 window.alert("User Not Found With This Number, Please Register First");
+                            }
+                            if(request.status == 500){
+                                window.alert("Try After Sometime");
+                                window.location.href = "http://127.0.0.1:8000/";
                             }
                         }
                     });
