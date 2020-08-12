@@ -6,6 +6,7 @@ from datetime import datetime
 from .models import UsersData, UsersOTP
 import random
 import json
+import sys
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.sessions.models import Session
 
@@ -70,7 +71,7 @@ class UserSignUp(APIView):
             username = request.data['username']
             password = request.data['password']
             number = request.data['number']
-            ip_address = request.data['ipAddress']
+            ip_address = json.loads(request.data['ipAddress'])
             BODY_HTML = "<h4>Hello User,</h4><br><div><p style='margin:0px'>Thank You for signup.</p></div><br><br><p style='margin:0px'></p><br><br><br>"
             print("here your email body", BODY_HTML)
 
@@ -94,11 +95,13 @@ class UserSignUp(APIView):
                     "message": "already register"
                 }
                 return JsonResponse(response, safe=False, status=409)
-        except:
-            response = {
-                "message": "Internal Server Error"
-            }
-            return JsonResponse(response, safe=False, status=500)
+        except Exception as ex:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print('Error on line {}'.format(sys.exc_info()
+                                            [-1].tb_lineno), type(ex).__name__, ex)
+            error = {"data": [], "message": message}
+            return JsonResponse(error, safe=False, status=500)
 
 
 '''
