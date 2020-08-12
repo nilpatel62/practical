@@ -50,7 +50,9 @@ def home_page(request):
         for user in user_details:
             user_name = user.username
             country_flag = user.country
-        return render(request, 'files/homepage.html', context={"username": user_name, "country_flag": country_flag})
+            number = user.number
+            email = user.email
+        return render(request, 'files/homepage.html', context={"username": user_name, "country_flag": country_flag, "number": number, "email": email})
     except:
         return redirect("/login/")
 
