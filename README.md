@@ -1,5 +1,5 @@
 #Steps for run the project successfully
-1. create one folder in your system and run command cd <your folder name>
+1. create one folder in your system and run command "cd your folder name"
 2. clone the repo using command: "git clone https://github.com/nilpatel62/practical.git"
 3. create virtualenv for install the dependencies command: "virtualenv -p python3 enve"
 4. active the virtual environment using command: ". enve/bin/activate"
