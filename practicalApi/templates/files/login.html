@@ -1,0 +1,110 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<style>
+    .note
+{
+    text-align: center;
+    height: 80px;
+    background: -webkit-linear-gradient(left, #0072ff, #8811c5);
+    color: #fff;
+    font-weight: bold;
+    line-height: 80px;
+}
+.form-content
+{
+    padding: 5%;
+    border: 1px solid #ced4da;
+    margin-bottom: 2%;
+}
+.form-control{
+    border-radius:1.5rem;
+}
+.btnSubmit
+{
+    border:none;
+    border-radius:1.5rem;
+    padding: 1%;
+    width: 20%;
+    cursor: pointer;
+    background: #0062cc;
+    color: #fff;
+}
+</style>
+<div class="container register-form">
+    <div class="form">
+        <div class="form-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number *" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="otp" id="otp" placeholder="Enter OTP" value=""/>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="send" name="send" class="btnSubmit" onclick="sendOtp()">Send OTP</button>
+            <button type="button" id="confirm" name="confirm" class="btnSubmit" onclick="confirmOtp()">Submit</button>
+        </div>
+    </div>
+    <script>
+            $( document ).ready(function() {
+                 console.log( "ready!" );
+                 $("#otp").hide();
+                 $("#confirm").hide();
+            });
+            function sendOtp() {
+                var number=document.getElementById("number").value;
+                console.log("Hello", number);
+                var data = {
+                    "number": number
+                }
+                $.ajax({
+                  type: "POST",
+                  url: "http://127.0.0.1:8000/sendOtp/",
+                  data:JSON.stringify(data),
+                  contentType: 'application/json',
+                  success: function(result, status, error)
+                    {
+                        window.alert("Your OTP is " +result.otp);
+                        $("#otp").show();
+                        $("#confirm").show();
+                        $("#send").hide();
+                        console.log("inside success",result.otp,status)
+                    },
+                  error: function (request, status, error) {
+                        if(request.status == 409){
+                            window.alert("Email already registered with other users");
+                            window.location.href = "http://127.0.0.1:8000/";
+                        }
+                    }
+                });
+            }
+            function confirmOtp() {
+                var number=document.getElementById("number").value;
+                var otp=document.getElementById("otp").value;
+                console.log("Hello", number);
+                var data = {
+                    "number": number,
+                    "otp": otp
+                }
+                $.ajax({
+                  type: "POST",
+                  url: "http://127.0.0.1:8000/validateOtp/",
+                  data:JSON.stringify(data),
+                  contentType: 'application/json',
+                  success: function(result, status, error)
+                    {
+                        window.location.href = "http://127.0.0.1:8000/homepage/";
+                    },
+                  error: function (request, status, error) {
+                        if(request.status == 422){
+                            window.alert("Please Enter Correct OTP");
+                        }
+                    }
+                });
+            }
+        </script>
+</div>
